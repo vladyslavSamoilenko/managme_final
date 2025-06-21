@@ -270,7 +270,7 @@ const Header: React.FC = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-            Project Manager
+            ManagMe
           </h1>
           <p className={`text-sm ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
             Welcome, {currentUser.firstName} {currentUser.lastName} ({currentUser.role})
