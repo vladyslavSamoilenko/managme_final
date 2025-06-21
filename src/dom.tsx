@@ -41,7 +41,6 @@ export interface Task {
   assignedUserId?: string;
 }
 
-// Mock Data
 const mockUsers: User[] = [
   { id: '1', firstName: 'Admin', lastName: 'User', role: 'admin' },
   { id: '2', firstName: 'John', lastName: 'Developer', role: 'developer' },
@@ -106,7 +105,6 @@ const mockStories: Story[] = [
     status: 'done',
     ownerId: '1'
   },
-  // Mobile App Stories
   {
     id: '6',
     name: 'Cross-platform Setup',
@@ -137,7 +135,6 @@ const mockStories: Story[] = [
     status: 'todo',
     ownerId: '1'
   },
-  // Data Analytics Stories
   {
     id: '9',
     name: 'Data Pipeline',
@@ -161,7 +158,6 @@ const mockStories: Story[] = [
 ];
 
 const mockTasks: Task[] = [
-  // User Authentication System Tasks
   {
     id: '1',
     name: 'Design Login Form',
@@ -174,257 +170,9 @@ const mockTasks: Task[] = [
     startDate: '2024-01-15T11:00:00Z',
     endDate: '2024-01-15T15:30:00Z',
     assignedUserId: '2'
-  },
-  {
-    id: '2',
-    name: 'Implement JWT Authentication',
-    description: 'Setup JWT token-based authentication system',
-    priority: 'high',
-    storyId: '1',
-    estimatedHours: 8,
-    status: 'doing',
-    createdDate: '2024-01-15T10:45:00Z',
-    startDate: '2024-01-16T09:00:00Z',
-    assignedUserId: '2'
-  },
-  {
-    id: '3',
-    name: 'Password Reset Feature',
-    description: 'Implement forgot password and reset functionality',
-    priority: 'medium',
-    storyId: '1',
-    estimatedHours: 6,
-    status: 'todo',
-    createdDate: '2024-01-15T11:00:00Z'
-  },
-  {
-    id: '4',
-    name: 'User Registration',
-    description: 'Create user registration with email verification',
-    priority: 'high',
-    storyId: '1',
-    estimatedHours: 5,
-    status: 'todo',
-    createdDate: '2024-01-15T11:15:00Z'
-  },
-  // Product Catalog Tasks
-  {
-    id: '5',
-    name: 'Product List Component',
-    description: 'Create reusable product listing component',
-    priority: 'high',
-    storyId: '2',
-    estimatedHours: 6,
-    status: 'todo',
-    createdDate: '2024-01-16T10:00:00Z'
-  },
-  {
-    id: '6',
-    name: 'Search Functionality',
-    description: 'Implement product search with filters',
-    priority: 'medium',
-    storyId: '2',
-    estimatedHours: 8,
-    status: 'todo',
-    createdDate: '2024-01-16T10:30:00Z'
-  },
-  {
-    id: '7',
-    name: 'Product Details Page',
-    description: 'Create detailed product view with images',
-    priority: 'high',
-    storyId: '2',
-    estimatedHours: 4,
-    status: 'todo',
-    createdDate: '2024-01-16T11:00:00Z'
-  },
-  // Shopping Cart Tasks
-  {
-    id: '8',
-    name: 'Cart State Management',
-    description: 'Implement Redux store for cart management',
-    priority: 'high',
-    storyId: '3',
-    estimatedHours: 6,
-    status: 'todo',
-    createdDate: '2024-01-17T14:30:00Z'
-  },
-  {
-    id: '9',
-    name: 'Cart UI Components',
-    description: 'Create cart sidebar and checkout page',
-    priority: 'medium',
-    storyId: '3',
-    estimatedHours: 5,
-    status: 'todo',
-    createdDate: '2024-01-17T15:00:00Z'
-  },
-  // Payment Integration Tasks
-  {
-    id: '10',
-    name: 'Stripe Integration',
-    description: 'Setup Stripe payment processing',
-    priority: 'high',
-    storyId: '4',
-    estimatedHours: 10,
-    status: 'todo',
-    createdDate: '2024-01-18T12:00:00Z'
-  },
-  {
-    id: '11',
-    name: 'PayPal Integration',
-    description: 'Add PayPal as payment option',
-    priority: 'medium',
-    storyId: '4',
-    estimatedHours: 8,
-    status: 'todo',
-    createdDate: '2024-01-18T12:30:00Z'
-  },
-  // Admin Dashboard Tasks (Completed)
-  {
-    id: '12',
-    name: 'Admin Authentication',
-    description: 'Create admin login with role-based access',
-    priority: 'high',
-    storyId: '5',
-    estimatedHours: 4,
-    status: 'done',
-    createdDate: '2024-01-19T16:15:00Z',
-    startDate: '2024-01-19T16:30:00Z',
-    endDate: '2024-01-19T20:30:00Z',
-    assignedUserId: '3'
-  },
-  {
-    id: '13',
-    name: 'Product Management',
-    description: 'CRUD operations for product management',
-    priority: 'high',
-    storyId: '5',
-    estimatedHours: 8,
-    status: 'done',
-    createdDate: '2024-01-19T16:30:00Z',
-    startDate: '2024-01-20T09:00:00Z',
-    endDate: '2024-01-20T17:00:00Z',
-    assignedUserId: '3'
-  },
-  {
-    id: '14',
-    name: 'Order Management',
-    description: 'View and manage customer orders',
-    priority: 'medium',
-    storyId: '5',
-    estimatedHours: 6,
-    status: 'done',
-    createdDate: '2024-01-19T17:00:00Z',
-    startDate: '2024-01-21T10:00:00Z',
-    endDate: '2024-01-21T16:00:00Z',
-    assignedUserId: '2'
-  },
-  // Mobile App Tasks
-  {
-    id: '15',
-    name: 'Navigation Setup',
-    description: 'Configure React Navigation with tab and stack navigators',
-    priority: 'high',
-    storyId: '6',
-    estimatedHours: 4,
-    status: 'done',
-    createdDate: '2024-01-20T08:30:00Z',
-    startDate: '2024-01-20T09:00:00Z',
-    endDate: '2024-01-20T13:00:00Z',
-    assignedUserId: '4'
-  },
-  {
-    id: '16',
-    name: 'Project Structure',
-    description: 'Setup folder structure and basic components',
-    priority: 'medium',
-    storyId: '6',
-    estimatedHours: 2,
-    status: 'done',
-    createdDate: '2024-01-20T09:00:00Z',
-    startDate: '2024-01-20T14:00:00Z',
-    endDate: '2024-01-20T16:00:00Z',
-    assignedUserId: '4'
-  },
-  {
-    id: '17',
-    name: 'Profile Form',
-    description: 'Create editable profile form with image upload',
-    priority: 'high',
-    storyId: '7',
-    estimatedHours: 6,
-    status: 'doing',
-    createdDate: '2024-01-21T14:00:00Z',
-    startDate: '2024-01-22T09:00:00Z',
-    assignedUserId: '4'
-  },
-  {
-    id: '18',
-    name: 'Profile Image Handling',
-    description: 'Implement camera and gallery image selection',
-    priority: 'medium',
-    storyId: '7',
-    estimatedHours: 4,
-    status: 'todo',
-    createdDate: '2024-01-21T14:30:00Z'
-  },
-  {
-    id: '19',
-    name: 'Push Notification Setup',
-    description: 'Configure Firebase Cloud Messaging',
-    priority: 'low',
-    storyId: '8',
-    estimatedHours: 8,
-    status: 'todo',
-    createdDate: '2024-01-22T11:00:00Z'
-  },
-  // Data Analytics Tasks
-  {
-    id: '20',
-    name: 'ETL Pipeline Design',
-    description: 'Design data extraction and transformation pipeline',
-    priority: 'high',
-    storyId: '9',
-    estimatedHours: 12,
-    status: 'doing',
-    createdDate: '2024-01-23T09:30:00Z',
-    startDate: '2024-01-23T10:00:00Z',
-    assignedUserId: '3'
-  },
-  {
-    id: '21',
-    name: 'Database Schema',
-    description: 'Design analytics database schema',
-    priority: 'high',
-    storyId: '9',
-    estimatedHours: 6,
-    status: 'todo',
-    createdDate: '2024-01-23T10:00:00Z'
-  },
-  {
-    id: '22',
-    name: 'Chart Components',
-    description: 'Create reusable chart components with D3.js',
-    priority: 'medium',
-    storyId: '10',
-    estimatedHours: 10,
-    status: 'todo',
-    createdDate: '2024-01-24T15:45:00Z'
-  },
-  {
-    id: '23',
-    name: 'Dashboard Layout',
-    description: 'Create responsive dashboard layout',
-    priority: 'medium',
-    storyId: '10',
-    estimatedHours: 4,
-    status: 'todo',
-    createdDate: '2024-01-24T16:00:00Z'
   }
 ];
 
-// Context
 interface AppContextType {
   currentUser: User;
   users: User[];
@@ -447,14 +195,12 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | null>(null);
 
-// API Service (Mock)
 class ApiService {
   static async getProjects(): Promise<Project[]> {
     return new Promise(resolve => setTimeout(() => resolve(mockProjects), 100));
   }
 
   static async getStories(projectId: string): Promise<Story[]> {
-    // Initialize with mock data if localStorage is empty
     const existingStories = localStorage.getItem('stories');
     if (!existingStories) {
       localStorage.setItem('stories', JSON.stringify(mockStories));
@@ -465,7 +211,6 @@ class ApiService {
   }
 
   static async getTasks(projectId: string): Promise<Task[]> {
-    // Initialize with mock data if localStorage is empty
     const existingTasks = localStorage.getItem('tasks');
     if (!existingTasks) {
       localStorage.setItem('tasks', JSON.stringify(mockTasks));
@@ -514,7 +259,6 @@ class ApiService {
   }
 }
 
-// Components
 const Header: React.FC = () => {
   const context = useContext(AppContext);
   if (!context) return null;
