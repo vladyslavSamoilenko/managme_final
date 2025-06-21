@@ -9,13 +9,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
+
 @Document("users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
     @Id
-    private Integer id;
+    private String id;
     private String name;
     private String surname;
     @Field(targetType = FieldType.STRING)

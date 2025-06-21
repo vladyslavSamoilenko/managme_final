@@ -1,5 +1,7 @@
 package com.backend.controller;
 
+import com.backend.dto.UserDTO;
+import com.backend.mapper.UserMapper;
 import com.backend.model.User;
 import com.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +18,33 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping
-    public List<User> getAll() {
-        return userRepository.findAll();
+    public List<UserDTO> getAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserMapper::toDTO)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable Integer id) {
+    public ResponseEntity<UserDTO> getById(@PathVariable String id) {
         return userRepository.findById(id)
+                .map(UserMapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody User incoming) {
-        User saved = userRepository.save(incoming);
+    public ResponseEntity<UserDTO> create(@RequestBody UserDTO dto) {
+        User user = userRepository.save(UserMapper.fromDTO(dto));
         return ResponseEntity
-                .created(URI.create("/api/users/" + saved.getId()))
-                .body(saved);
+                .created(URI.create("/api/users/" + user.getId()))
+                .body(UserMapper.toDTO(user));
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<User> update(
-            @PathVariable Integer id,
+            @PathVariable String id,
             @RequestBody User incoming
     ) {
         return userRepository.findById(id)
@@ -52,7 +59,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         if (!userRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }

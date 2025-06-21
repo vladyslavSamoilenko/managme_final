@@ -1,5 +1,7 @@
 package com.backend.controller;
 
+import com.backend.dto.TaskDTO;
+import com.backend.mapper.TaskMapper;
 import com.backend.model.Task;
 import com.backend.model.User;
 import com.backend.model.constance.State;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import com.backend.model.constance.Priority;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -22,72 +25,76 @@ public class TaskController {
 
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private StoryRepository storyRepository;
 
     @GetMapping
-    public List<Task> findAllByProject(@RequestParam Integer id){
-        return taskRepository.findByStory_Project_Id(id);
+    public List<TaskDTO> findAllByStory(@RequestParam String storyId) {
+        return taskRepository.findByStoryId(storyId)
+                .stream()
+                .map(TaskMapper::toDTO)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> findById(@PathVariable Integer id){
+    public ResponseEntity<TaskDTO> getById(@PathVariable String id) {
         return taskRepository.findById(id)
+                .map(TaskMapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Task> addTask(@RequestBody Task incoming){
-        storyRepository.findById(incoming.getStory().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "History not found"));
-        if (incoming.getTaskOwner() != null){
-            userRepository.findById(incoming.getTaskOwner().getId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
-
+    public ResponseEntity<TaskDTO> create(@RequestBody TaskDTO dto) {
+        if (!storyRepository.existsById(dto.getStoryId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Story not found");
+        }
+        if (dto.getUserId() != null && !userRepository.existsById(dto.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
         }
 
-        Task saved = taskRepository.save(incoming);
-        return ResponseEntity.created(URI.create("/api/tasks" + saved.getId()))
-                .body(saved);
+        Task task = TaskMapper.fromDTO(dto);
+        task.setCreatedAt(LocalDate.parse(LocalDate.now().toString()));
+
+        Task saved = taskRepository.save(task);
+        return ResponseEntity.created(URI.create("/api/tasks/" + saved.getId()))
+                .body(TaskMapper.toDTO(saved));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> update(@PathVariable Integer id, @RequestBody Task incoming){
+    public ResponseEntity<TaskDTO> update(@PathVariable String id, @RequestBody TaskDTO dto) {
         return taskRepository.findById(id)
                 .map(existing -> {
-                    if (incoming.getTitle() != null) existing.setTitle(incoming.getTitle());
-                    if (incoming.getDescription() != null) existing.setDescription(incoming.getDescription());
-                    if (incoming.getPriority() != null) existing.setPriority(incoming.getPriority());
-                    if (incoming.getTimeToDo() != null) existing.setTimeToDo(incoming.getTimeToDo());
-                    if (incoming.getState() != null) existing.setState(incoming.getState());
-
-                    if(incoming.getStory() != null && incoming.getStory().getId() != null){
-                        User user = userRepository.findById(incoming.getTaskOwner().getId())
-                                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
-                        existing.setTaskOwner(user);
-                    }
-
-                    if(existing.getState() == State.DOING && existing.getStartedAt() == null){
-                        existing.setStartedAt(LocalDate.now());
-                    }
-                    if(existing.getState() == State.DOING && existing.getFinishedAt() == null){
-                        existing.setFinishedAt(LocalDate.now());
-                    }
+                    if (dto.getTitle() != null) existing.setTitle(dto.getTitle());
+                    if (dto.getDescription() != null) existing.setDescription(dto.getDescription());
+                    if (dto.getPriority() != null)
+                        existing.setPriority(Priority.valueOf(dto.getPriority().toUpperCase()));
+                    if (dto.getTimeToDo() != null)
+                        existing.setTimeToDo(dto.getTimeToDo());
+                    if (dto.getState() != null)
+                        existing.setState(State.valueOf(dto.getState().toUpperCase()));
+                    if (dto.getCreatedAt() != null)
+                        existing.setCreatedAt(LocalDate.parse(dto.getCreatedAt()));
+                    if (dto.getStartedAt() != null)
+                        existing.setStartedAt(LocalDate.parse(dto.getStartedAt()));
+                    if (dto.getFinishedAt() != null)
+                        existing.setFinishedAt(LocalDate.parse(dto.getFinishedAt()));
+                    if (dto.getUserId() != null)
+                        existing.setUserId(dto.getUserId());
 
                     Task updated = taskRepository.save(existing);
-                    return ResponseEntity.ok(updated);
+                    return ResponseEntity.ok(TaskMapper.toDTO(updated));
                 })
                 .orElse(ResponseEntity.notFound().build());
-
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id){
-        if(!taskRepository.existsById(id)){
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        if (!taskRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
-
         taskRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }

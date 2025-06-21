@@ -1,5 +1,7 @@
 package com.backend.controller;
 
+import com.backend.dto.ProjectDTO;
+import com.backend.mapper.ProjectMapper;
 import com.backend.model.Project;
 import com.backend.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,44 +22,48 @@ public class ProjectController {
     }
 
     @GetMapping
-    public List<Project> getAll() {
-        return projectRepository.findAll();
-    }
-
-    @PostMapping
-    public ResponseEntity<Project> addProject(@RequestBody Project project){
-        Project addedProject = projectRepository.save(project);
-        return ResponseEntity.created(URI.create("api/projects/" + addedProject.getId()))
-                .body(addedProject);
+    public List<ProjectDTO> getAll() {
+        return projectRepository.findAll()
+                .stream()
+                .map(ProjectMapper::toDTO)
+                .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectById(@PathVariable Integer id){
+    public ResponseEntity<ProjectDTO> getById(@PathVariable String id) {
         return projectRepository.findById(id)
+                .map(ProjectMapper::toDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping
+    public ResponseEntity<ProjectDTO> create(@RequestBody ProjectDTO dto) {
+        Project saved = projectRepository.save(ProjectMapper.fromDTO(dto));
+        return ResponseEntity
+                .created(URI.create("/api/projects/" + saved.getId()))
+                .body(ProjectMapper.toDTO(saved));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProjectDTO> update(@PathVariable String id, @RequestBody ProjectDTO dto) {
+        return projectRepository.findById(id)
+                .map(existing -> {
+                    existing.setTitle(dto.getTitle());
+                    existing.setDescription(dto.getDescription());
+                    Project updated = projectRepository.save(existing);
+                    return ResponseEntity.ok(ProjectMapper.toDTO(updated));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProject(@PathVariable Integer id){
-        if(!projectRepository.existsById(id)){
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        if (!projectRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
         projectRepository.deleteById(id);
         return ResponseEntity.noContent().build();
-
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Project> updateProject(@PathVariable Integer id, @RequestBody Project project){
-        return projectRepository.findById(id)
-                .map(existing -> {
-                   existing.setTitle(project.getTitle());
-                   existing.setDescription(project.getDescription());
-                   Project updated = projectRepository.save(existing);
-                   return ResponseEntity.ok(updated);
-                })
-                .orElse(ResponseEntity.notFound().build());
     }
 
 }

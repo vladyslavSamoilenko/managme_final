@@ -19,22 +19,21 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Task {
     @Id
-    private Integer id;
+    private String id;
 
     private String title;
     private String description;
     @Field(targetType = FieldType.STRING)
     private Priority priority;
 
-    @DBRef(lazy = true)
-    private Story story;
-    private Integer timeToDo;
+
+    private String storyId;
+    private String timeToDo;
     @Field(targetType = FieldType.STRING)
     private State state;
     private LocalDate createdAt;
     private LocalDate startedAt;
     private LocalDate finishedAt;
 
-    @DBRef(lazy = true)
-    private User taskOwner;
+    private String userId;
 }

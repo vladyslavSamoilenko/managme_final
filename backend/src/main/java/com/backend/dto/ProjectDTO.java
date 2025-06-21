@@ -1,17 +1,13 @@
-package com.backend.model;
+package com.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("projects")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Project {
-    @Id
+public class ProjectDTO {
     private String id;
     private String title;
     private String description;
